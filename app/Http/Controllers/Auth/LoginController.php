@@ -21,7 +21,11 @@ final class LoginController extends Controller
         return $this->successResponse(
             data: [
                 'user' => new UserResource($user),
-                'token' => $user->createToken('auth', TokenAbility::values())->plainTextToken,
+                'token' => $user->createToken(
+                    TokenAbility::TOKEN_NAME,
+                    TokenAbility::values(),
+                    now()->addMinutes((int) config('sanctum.expiration', 1440)), // @phpstan-ignore cast.int
+                )->plainTextToken,
             ],
             message: 'Login successful.',
         );

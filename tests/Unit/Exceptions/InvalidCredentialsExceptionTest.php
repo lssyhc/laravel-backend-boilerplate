@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Exceptions\Auth\InvalidCredentialsException;
-use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,16 +13,22 @@ use Illuminate\Http\Request;
 
 describe('InvalidCredentialsException', function () {
 
-    it('renders as JSON with 401 status', function () {
+    it('extends HttpException', function () {
         $exception = new InvalidCredentialsException;
-        $request = Request::create('/api/auth/login', 'POST');
 
-        $response = $exception->render($request);
+        expect($exception)->toBeInstanceOf(HttpException::class);
+    });
 
-        expect($response->getStatusCode())->toBe(401);
+    it('has 401 status code', function () {
+        $exception = new InvalidCredentialsException;
 
-        $data = $response->getData(true);
-        expect($data['message'])->toBe('The provided credentials are incorrect.');
+        expect($exception->getStatusCode())->toBe(401);
+    });
+
+    it('has correct error message', function () {
+        $exception = new InvalidCredentialsException;
+
+        expect($exception->getMessage())->toBe('The provided credentials are incorrect.');
     });
 
     it('does not report to exception handler', function () {

@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace App\Exceptions\Auth;
 
-use Exception;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
-final class InvalidCredentialsException extends Exception
+final class InvalidCredentialsException extends HttpException
 {
-    public function render(Request $request): JsonResponse
+    public function __construct()
     {
-        return response()->json([
-            'message' => 'The provided credentials are incorrect.',
-        ], Response::HTTP_UNAUTHORIZED);
+        parent::__construct(
+            statusCode: Response::HTTP_UNAUTHORIZED,
+            message: 'The provided credentials are incorrect.',
+        );
     }
 
     public function report(): bool

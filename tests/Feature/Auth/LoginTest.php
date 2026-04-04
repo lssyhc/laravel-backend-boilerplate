@@ -6,11 +6,11 @@ use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
-| POST /api/auth/login
+| POST /api/v1/auth/login
 |--------------------------------------------------------------------------
 */
 
-describe('POST /api/auth/login', function () {
+describe('POST /api/v1/auth/login', function () {
 
     // ── Happy Path ──────────────────────────────────────────────────────
 
@@ -20,7 +20,7 @@ describe('POST /api/auth/login', function () {
             'password' => 'password',
         ]);
 
-        $response = $this->postJson('/api/auth/login', [
+        $response = $this->postJson('/api/v1/auth/login', [
             'email' => 'john@example.com',
             'password' => 'password',
         ]);
@@ -43,7 +43,7 @@ describe('POST /api/auth/login', function () {
             'password' => 'password',
         ]);
 
-        $response = $this->postJson('/api/auth/login', [
+        $response = $this->postJson('/api/v1/auth/login', [
             'email' => 'john@example.com',
             'password' => 'password',
         ]);
@@ -58,7 +58,7 @@ describe('POST /api/auth/login', function () {
             'password' => 'password',
         ]);
 
-        $response = $this->postJson('/api/auth/login', [
+        $response = $this->postJson('/api/v1/auth/login', [
             'email' => 'john@example.com',
             'password' => 'password',
         ]);
@@ -76,7 +76,7 @@ describe('POST /api/auth/login', function () {
             'password' => 'password',
         ]);
 
-        $this->postJson('/api/auth/login', [
+        $this->postJson('/api/v1/auth/login', [
             'email' => 'john@example.com',
             'password' => 'wrong-password',
         ])->assertStatus(401)
@@ -84,7 +84,7 @@ describe('POST /api/auth/login', function () {
     });
 
     it('fails with nonexistent email', function () {
-        $this->postJson('/api/auth/login', [
+        $this->postJson('/api/v1/auth/login', [
             'email' => 'nonexistent@example.com',
             'password' => 'password',
         ])->assertStatus(401)
@@ -94,26 +94,26 @@ describe('POST /api/auth/login', function () {
     // ── Validation Errors (422) ─────────────────────────────────────────
 
     it('fails without email', function () {
-        $this->postJson('/api/auth/login', [
+        $this->postJson('/api/v1/auth/login', [
             'password' => 'password',
         ])->assertStatus(422)->assertJsonValidationErrors(['email']);
     });
 
     it('fails without password', function () {
-        $this->postJson('/api/auth/login', [
+        $this->postJson('/api/v1/auth/login', [
             'email' => 'john@example.com',
         ])->assertStatus(422)->assertJsonValidationErrors(['password']);
     });
 
     it('fails with invalid email format', function () {
-        $this->postJson('/api/auth/login', [
+        $this->postJson('/api/v1/auth/login', [
             'email' => 'not-an-email',
             'password' => 'password',
         ])->assertStatus(422)->assertJsonValidationErrors(['email']);
     });
 
     it('fails when all fields are empty', function () {
-        $this->postJson('/api/auth/login', [])
+        $this->postJson('/api/v1/auth/login', [])
             ->assertStatus(422)
             ->assertJsonValidationErrors(['email', 'password']);
     });

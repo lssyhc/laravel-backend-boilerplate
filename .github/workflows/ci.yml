@@ -8,7 +8,7 @@ on:
 
 jobs:
   lint:
-    name: Code Style
+    name: Code Style (Pint)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,15 +17,16 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.3"
+          coverage: none
 
       - name: Install Dependencies
-        run: composer install --no-interaction --prefer-dist
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Run Pint
         run: vendor/bin/pint --test
 
   analyse:
-    name: Static Analysis
+    name: Static Analysis (PHPStan)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,9 +35,10 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.3"
+          coverage: none
 
       - name: Install Dependencies
-        run: composer install --no-interaction --prefer-dist
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Prepare Environment
         run: |
@@ -47,7 +49,7 @@ jobs:
         run: vendor/bin/phpstan analyse --memory-limit=2G
 
   test:
-    name: Tests
+    name: Tests (Pest)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -59,7 +61,7 @@ jobs:
           coverage: xdebug
 
       - name: Install Dependencies
-        run: composer install --no-interaction --prefer-dist
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Prepare Environment
         run: |
@@ -67,4 +69,25 @@ jobs:
           php artisan key:generate
 
       - name: Run Tests
-        run: php artisan test --coverage --min=80
+        run: php artisan test --parallel --coverage --min=80
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ":memory:"
+
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          coverage: none
+
+      - name: Install Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Check for known vulnerabilities
+        run: composer audit

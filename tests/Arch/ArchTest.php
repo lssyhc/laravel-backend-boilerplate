@@ -36,6 +36,10 @@ arch('models extend Authenticatable or Model')
     ->toExtend('Illuminate\Database\Eloquent\Model')
     ->ignoring('App\Models\User');
 
+arch('models are final classes')
+    ->expect('App\Models')
+    ->toBeFinal();
+
 arch('controllers extend base Controller')
     ->expect('App\Http\Controllers')
     ->toExtend('App\Http\Controllers\Controller')

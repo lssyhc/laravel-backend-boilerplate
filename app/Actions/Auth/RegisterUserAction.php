@@ -6,9 +6,13 @@ namespace App\Actions\Auth;
 
 use App\DTOs\Auth\RegisterUserData;
 use App\Models\User;
+use Illuminate\Database\QueryException;
 
 final class RegisterUserAction
 {
+    /**
+     * @throws QueryException
+     */
     public function execute(RegisterUserData $data): User
     {
         return User::create([

@@ -9,6 +9,8 @@ enum TokenAbility: string
     case AccessApi = 'api:access';
     case ManageProfile = 'profile:manage';
 
+    public const TOKEN_NAME = 'api-token';
+
     /**
      * @return list<string>
      */

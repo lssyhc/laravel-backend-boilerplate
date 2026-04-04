@@ -14,11 +14,8 @@ final class LogoutController extends Controller
 {
     public function __invoke(Request $request, LogoutUserAction $action): JsonResponse
     {
+        /** @var User $user */
         $user = $request->user();
-
-        if (! $user instanceof User) {
-            abort(401);
-        }
 
         $action->execute($user);
 
