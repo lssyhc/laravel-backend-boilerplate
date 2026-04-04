@@ -64,5 +64,10 @@
 
     // ── PHPStan / Larastan ──────────────────────────────────────────
     "phpstan.configFile": "phpstan.neon",
-    "phpstan.memoryLimit": "2G"
+    "phpstan.memoryLimit": "2G",
+
+    // ── Intelephense ────────────────────────────────────────────────
+    // Set PHP version so Intelephense understands 8.4 syntax.
+    "intelephense.environment.phpVersion": "8.4.0",
+    "intelephense.telemetry.enabled": false
 }
