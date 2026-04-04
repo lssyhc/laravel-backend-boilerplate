@@ -1,38 +1,30 @@
 <?php
 
-namespace Tests\Feature\Auth;
-
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
-use Tests\TestCase;
 
-class LogoutTest extends TestCase
-{
-    use RefreshDatabase;
+/*
+|--------------------------------------------------------------------------
+| POST /api/auth/logout
+|--------------------------------------------------------------------------
+*/
 
-    public function test_authenticated_user_can_logout(): void
-    {
+describe('POST /api/auth/logout', function () {
+
+    // ── Happy Path ──────────────────────────────────────────────────────
+
+    it('logs out an authenticated user', function () {
         $user = User::factory()->create();
 
         Sanctum::actingAs($user);
 
-        $response = $this->postJson('/api/auth/logout');
-
-        $response->assertOk()
+        $this->postJson('/api/auth/logout')
+            ->assertOk()
             ->assertJsonPath('message', 'Successfully logged out.')
             ->assertJsonPath('data', null);
-    }
+    });
 
-    public function test_unauthenticated_user_cannot_logout(): void
-    {
-        $response = $this->postJson('/api/auth/logout');
-
-        $response->assertStatus(401);
-    }
-
-    public function test_token_is_revoked_after_logout(): void
-    {
+    it('revokes the token after logout', function () {
         $user = User::factory()->create();
         $token = $user->createToken('auth');
 
@@ -43,5 +35,19 @@ class LogoutTest extends TestCase
         $this->assertDatabaseMissing('personal_access_tokens', [
             'id' => $token->accessToken->id,
         ]);
-    }
-}
+    });
+
+    // ── Unauthorized (401) ──────────────────────────────────────────────
+
+    it('rejects unauthenticated user', function () {
+        $this->postJson('/api/auth/logout')
+            ->assertStatus(401);
+    });
+
+    it('rejects request with invalid token', function () {
+        $this->withHeader('Authorization', 'Bearer invalid-token')
+            ->postJson('/api/auth/logout')
+            ->assertStatus(401);
+    });
+
+});

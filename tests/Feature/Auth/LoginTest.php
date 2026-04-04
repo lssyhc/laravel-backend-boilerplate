@@ -1,17 +1,18 @@
 <?php
 
-namespace Tests\Feature\Auth;
-
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class LoginTest extends TestCase
-{
-    use RefreshDatabase;
+/*
+|--------------------------------------------------------------------------
+| POST /api/auth/login
+|--------------------------------------------------------------------------
+*/
 
-    public function test_user_can_login_with_valid_credentials(): void
-    {
+describe('POST /api/auth/login', function () {
+
+    // ── Happy Path ──────────────────────────────────────────────────────
+
+    it('logs in with valid credentials', function () {
         User::factory()->create([
             'email' => 'john@example.com',
             'password' => 'password',
@@ -30,69 +31,11 @@ class LoginTest extends TestCase
                     'token',
                 ],
             ])
-            ->assertJsonPath('data.user.email', 'john@example.com');
-    }
+            ->assertJsonPath('data.user.email', 'john@example.com')
+            ->assertJsonPath('message', 'Login successful.');
+    });
 
-    public function test_user_cannot_login_with_invalid_password(): void
-    {
-        User::factory()->create([
-            'email' => 'john@example.com',
-            'password' => 'password',
-        ]);
-
-        $response = $this->postJson('/api/auth/login', [
-            'email' => 'john@example.com',
-            'password' => 'wrong-password',
-        ]);
-
-        $response->assertStatus(401)
-            ->assertJsonPath('message', 'The provided credentials are incorrect.');
-    }
-
-    public function test_user_cannot_login_with_nonexistent_email(): void
-    {
-        $response = $this->postJson('/api/auth/login', [
-            'email' => 'nonexistent@example.com',
-            'password' => 'password',
-        ]);
-
-        $response->assertStatus(401)
-            ->assertJsonPath('message', 'The provided credentials are incorrect.');
-    }
-
-    public function test_user_cannot_login_without_email(): void
-    {
-        $response = $this->postJson('/api/auth/login', [
-            'password' => 'password',
-        ]);
-
-        $response->assertStatus(422)
-            ->assertJsonValidationErrors(['email']);
-    }
-
-    public function test_user_cannot_login_without_password(): void
-    {
-        $response = $this->postJson('/api/auth/login', [
-            'email' => 'john@example.com',
-        ]);
-
-        $response->assertStatus(422)
-            ->assertJsonValidationErrors(['password']);
-    }
-
-    public function test_user_cannot_login_with_invalid_email_format(): void
-    {
-        $response = $this->postJson('/api/auth/login', [
-            'email' => 'not-an-email',
-            'password' => 'password',
-        ]);
-
-        $response->assertStatus(422)
-            ->assertJsonValidationErrors(['email']);
-    }
-
-    public function test_login_returns_token(): void
-    {
+    it('returns a non-empty token upon login', function () {
         User::factory()->create([
             'email' => 'john@example.com',
             'password' => 'password',
@@ -104,11 +47,10 @@ class LoginTest extends TestCase
         ]);
 
         $response->assertOk();
-        $this->assertNotEmpty($response->json('data.token'));
-    }
+        expect($response->json('data.token'))->not->toBeEmpty();
+    });
 
-    public function test_login_response_does_not_expose_password(): void
-    {
+    it('does not expose password or remember_token in response', function () {
         User::factory()->create([
             'email' => 'john@example.com',
             'password' => 'password',
@@ -122,5 +64,56 @@ class LoginTest extends TestCase
         $response->assertOk()
             ->assertJsonMissingPath('data.user.password')
             ->assertJsonMissingPath('data.user.remember_token');
-    }
-}
+    });
+
+    // ── Unauthorized (401) ──────────────────────────────────────────────
+
+    it('fails with wrong password', function () {
+        User::factory()->create([
+            'email' => 'john@example.com',
+            'password' => 'password',
+        ]);
+
+        $this->postJson('/api/auth/login', [
+            'email' => 'john@example.com',
+            'password' => 'wrong-password',
+        ])->assertStatus(401)
+            ->assertJsonPath('message', 'The provided credentials are incorrect.');
+    });
+
+    it('fails with nonexistent email', function () {
+        $this->postJson('/api/auth/login', [
+            'email' => 'nonexistent@example.com',
+            'password' => 'password',
+        ])->assertStatus(401)
+            ->assertJsonPath('message', 'The provided credentials are incorrect.');
+    });
+
+    // ── Validation Errors (422) ─────────────────────────────────────────
+
+    it('fails without email', function () {
+        $this->postJson('/api/auth/login', [
+            'password' => 'password',
+        ])->assertStatus(422)->assertJsonValidationErrors(['email']);
+    });
+
+    it('fails without password', function () {
+        $this->postJson('/api/auth/login', [
+            'email' => 'john@example.com',
+        ])->assertStatus(422)->assertJsonValidationErrors(['password']);
+    });
+
+    it('fails with invalid email format', function () {
+        $this->postJson('/api/auth/login', [
+            'email' => 'not-an-email',
+            'password' => 'password',
+        ])->assertStatus(422)->assertJsonValidationErrors(['email']);
+    });
+
+    it('fails when all fields are empty', function () {
+        $this->postJson('/api/auth/login', [])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['email', 'password']);
+    });
+
+});

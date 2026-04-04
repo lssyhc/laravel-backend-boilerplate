@@ -1,18 +1,19 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
-use Tests\TestCase;
 
-class UserTest extends TestCase
-{
-    use RefreshDatabase;
+/*
+|--------------------------------------------------------------------------
+| GET /api/user
+|--------------------------------------------------------------------------
+*/
 
-    public function test_authenticated_user_can_get_own_profile(): void
-    {
+describe('GET /api/user', function () {
+
+    // ── Happy Path ──────────────────────────────────────────────────────
+
+    it('returns authenticated user profile', function () {
         $user = User::factory()->create();
 
         Sanctum::actingAs($user);
@@ -26,27 +27,32 @@ class UserTest extends TestCase
             ])
             ->assertJsonPath('data.id', $user->id)
             ->assertJsonPath('data.name', $user->name)
-            ->assertJsonPath('data.email', $user->email);
-    }
+            ->assertJsonPath('data.email', $user->email)
+            ->assertJsonPath('message', 'Success');
+    });
 
-    public function test_unauthenticated_user_cannot_get_profile(): void
-    {
-        $response = $this->getJson('/api/user');
-
-        $response->assertStatus(401);
-    }
-
-    public function test_user_profile_does_not_expose_password(): void
-    {
+    it('does not expose password or remember_token', function () {
         $user = User::factory()->create();
 
         Sanctum::actingAs($user);
 
-        $response = $this->getJson('/api/user');
-
-        $response->assertOk()
+        $this->getJson('/api/user')
+            ->assertOk()
             ->assertJsonMissingPath('data.password')
-            ->assertJsonMissingPath('data.remember_token')
-            ->assertJsonPath('message', 'Success');
-    }
-}
+            ->assertJsonMissingPath('data.remember_token');
+    });
+
+    // ── Unauthorized (401) ──────────────────────────────────────────────
+
+    it('rejects unauthenticated request', function () {
+        $this->getJson('/api/user')
+            ->assertStatus(401);
+    });
+
+    it('rejects request with invalid token', function () {
+        $this->withHeader('Authorization', 'Bearer invalid-token')
+            ->getJson('/api/user')
+            ->assertStatus(401);
+    });
+
+});
