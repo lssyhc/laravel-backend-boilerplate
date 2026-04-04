@@ -1,0 +1,28 @@
+{
+    // Extensions that every team member should install for this project.
+    "recommendations": [
+        // ── PHP ─────────────────────────────────────────────────────
+        "bmewburn.vscode-intelephense-client", // PHP language server (intellisense)
+        "open-southeners.laravel-pint", // Laravel Pint formatter (format on save)
+
+        // ── Laravel ─────────────────────────────────────────────────
+        "amiralizadeh9480.laravel-extra-intellisense", // Route, config, view autocomplete
+
+        // ── Testing ─────────────────────────────────────────────────
+        "dansysanalyst.pest-snippets", // Pest code snippets
+        "recca0120.vscode-phpunit", // PHPUnit & Pest test explorer
+
+        // ── Static Analysis ─────────────────────────────────────────
+        "swordev.phpstan", // PHPStan / Larastan integration
+
+        // ── DX / Quality of Life ────────────────────────────────────
+        "mikestead.dotenv", // .env syntax highlighting
+        "editorconfig.editorconfig", // EditorConfig support
+        "streetsidesoftware.code-spell-checker" // Catch typos in code & comments
+    ],
+
+    // Extensions that conflict with the project setup or cause issues.
+    "unwantedRecommendations": [
+        "junstyle.php-cs-fixer" // Conflicts with Pint (both are CS fixers)
+    ]
+}

@@ -1,0 +1,68 @@
+{
+    // ── File Explorer ───────────────────────────────────────────────
+    // Hide auto-generated IDE helper files from the sidebar.
+    "files.exclude": {
+        "_ide_helper.php": true,
+        "_ide_helper_models.php": true,
+        ".phpstorm.meta.php": true
+    },
+
+    // ── Search ──────────────────────────────────────────────────────
+    // Prevent search results from being polluted by generated/vendored code.
+    "search.exclude": {
+        "**/vendor": true,
+        "**/node_modules": true,
+        "**/storage/framework": true,
+        "**/storage/logs": true,
+        "**/bootstrap/cache": true,
+        "**/public/build": true,
+        "_ide_helper.php": true,
+        "_ide_helper_models.php": true,
+        ".phpstorm.meta.php": true,
+        "*.lock": true
+    },
+
+    // ── Files ───────────────────────────────────────────────────────
+    // Enforce LF line endings (matches .editorconfig).
+    "files.eol": "\n",
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "files.associations": {
+        ".env*": "dotenv"
+    },
+
+    // ── Editor ──────────────────────────────────────────────────────
+    "editor.guides.bracketPairs": "active",
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+
+    // ── PHP (Pint) ──────────────────────────────────────────────────
+    // Format PHP files with Laravel Pint on save.
+    "[php]": {
+        "editor.defaultFormatter": "open-southeners.laravel-pint",
+        "editor.formatOnSave": true,
+        "editor.tabSize": 4
+    },
+
+    // ── JSON ────────────────────────────────────────────────────────
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features",
+        "editor.tabSize": 4
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features",
+        "editor.tabSize": 4
+    },
+
+    // ── YAML / Markdown ─────────────────────────────────────────────
+    "[yaml]": {
+        "editor.tabSize": 2
+    },
+    "[markdown]": {
+        "files.trimTrailingWhitespace": false
+    },
+
+    // ── PHPStan / Larastan ──────────────────────────────────────────
+    "phpstan.configFile": "phpstan.neon",
+    "phpstan.memoryLimit": "2G"
+}
