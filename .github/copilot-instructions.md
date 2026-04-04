@@ -2,7 +2,7 @@
 
 ## Tech Stack
 
-- **PHP 8.3+**, **Laravel 13**, **Sanctum 4** (token-based auth)
+- **PHP 8.4+**, **Laravel 13**, **Sanctum 4** (token-based auth)
 - **Pest 4** (testing), **Larastan level 9** (static analysis), **Pint** (code style, Laravel preset)
 - Database: SQLite (dev/test), no Eloquent ORM alternatives
 

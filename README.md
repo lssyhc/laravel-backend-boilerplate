@@ -4,7 +4,7 @@ Boilerplate untuk backend API menggunakan Laravel 13, Sanctum, dan tooling moder
 
 ## Tech Stack
 
-- **PHP** 8.3+
+- **PHP** 8.4+
 - **Laravel** 13.x
 - **Auth** Laravel Sanctum 4 (token-based)
 - **Static Analysis** Larastan (PHPStan level 9)
