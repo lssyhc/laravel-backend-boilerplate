@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -18,11 +19,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->throttleApi();
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->shouldRenderJsonWhen(function (Request $request, Throwable $e) {
+        $exceptions->shouldRenderJsonWhen(function (Request $request, Throwable $e): bool {
             return $request->expectsJson() || $request->is('api/*');
         });
 
-        $exceptions->renderable(function (HttpExceptionInterface $e, Request $request) {
+        $exceptions->renderable(function (HttpExceptionInterface $e, Request $request): ?JsonResponse {
             if ($request->expectsJson() || $request->is('api/*')) {
                 $statusCode = $e->getStatusCode();
                 $message = $e->getMessage() ?: (Response::$statusTexts[$statusCode] ?? 'An error occurred.');
@@ -31,5 +32,7 @@ return Application::configure(basePath: dirname(__DIR__))
                     'message' => $message,
                 ], $statusCode);
             }
+
+            return null;
         });
     })->create();

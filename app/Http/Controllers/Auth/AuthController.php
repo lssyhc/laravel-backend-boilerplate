@@ -25,14 +25,7 @@ class AuthController extends Controller
     ): JsonResponse {
         $user = $action->execute(RegisterUserData::fromRequest($request));
 
-        return $this->successResponse(
-            data: [
-                'user' => new UserResource($user),
-                'token' => $user->createToken('auth', [TokenAbility::All->value])->plainTextToken,
-            ],
-            message: 'User registered successfully.',
-            status: Response::HTTP_CREATED,
-        );
+        return $this->authenticatedResponse($user, 'User registered successfully.', Response::HTTP_CREATED);
     }
 
     public function login(
@@ -41,13 +34,7 @@ class AuthController extends Controller
     ): JsonResponse {
         $user = $action->execute(LoginUserData::fromRequest($request));
 
-        return $this->successResponse(
-            data: [
-                'user' => new UserResource($user),
-                'token' => $user->createToken('auth', [TokenAbility::All->value])->plainTextToken,
-            ],
-            message: 'Login successful.',
-        );
+        return $this->authenticatedResponse($user, 'Login successful.');
     }
 
     public function logout(
@@ -61,6 +48,18 @@ class AuthController extends Controller
 
         return $this->successResponse(
             message: 'Successfully logged out.',
+        );
+    }
+
+    private function authenticatedResponse(User $user, string $message, int $status = Response::HTTP_OK): JsonResponse
+    {
+        return $this->successResponse(
+            data: [
+                'user' => new UserResource($user),
+                'token' => $user->createToken('auth', [TokenAbility::All->value])->plainTextToken,
+            ],
+            message: $message,
+            status: $status,
         );
     }
 }
