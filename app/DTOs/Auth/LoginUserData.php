@@ -13,9 +13,12 @@ final readonly class LoginUserData
 
     public static function fromRequest(LoginRequest $request): self
     {
+        /** @var array{email: string, password: string} $data */
+        $data = $request->validated();
+
         return new self(
-            email: $request->validated('email'),
-            password: $request->validated('password'),
+            email: $data['email'],
+            password: $data['password'],
         );
     }
 }

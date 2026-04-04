@@ -7,8 +7,7 @@ parameters:
         - app/
 
     # Level 9 is the highest level (strictest).
-    # You can change it to level 0 (lowest) if the project is huge and legacy.
-    level: 6
+    level: 9
 
     ignoreErrors:
         # Add your ignored errors here if needed

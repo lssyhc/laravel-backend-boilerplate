@@ -14,10 +14,13 @@ final readonly class RegisterUserData
 
     public static function fromRequest(RegisterRequest $request): self
     {
+        /** @var array{name: string, email: string, password: string} $data */
+        $data = $request->validated();
+
         return new self(
-            name: $request->validated('name'),
-            email: $request->validated('email'),
-            password: $request->validated('password'),
+            name: $data['name'],
+            email: $data['email'],
+            password: $data['password'],
         );
     }
 }
