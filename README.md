@@ -29,15 +29,21 @@ Script `composer setup` akan menjalankan:
 ## Development
 
 ```bash
-# Start server + queue + log watcher
+# Start development services (auto-detect OS)
 composer dev
 ```
 
-Ini menjalankan secara paralel:
+Ini menjalankan server dan queue worker via orchestrator inline yang auto-detect OS.
+
+Secara umum yang aktif:
 
 - `php artisan serve` — HTTP server
 - `php artisan queue:listen` — Queue worker
-- `php artisan pail` — Real-time log viewer
+
+Catatan:
+
+- `composer dev` auto-detect OS dan menjalankan server + queue tanpa file helper tambahan.
+- Di Windows native, `php artisan pail` tidak didukung karena extension `pcntl` tidak tersedia.
 
 ## Testing
 

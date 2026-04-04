@@ -2,6 +2,7 @@
     "$schema": "https://getcomposer.org/schema.json",
     "name": "laravel/laravel",
     "type": "project",
+    "license": "proprietary",
     "description": "The skeleton application for the Laravel framework.",
     "keywords": [
         "laravel",
@@ -47,7 +48,7 @@
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
-            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185\" \"php artisan serve\" \"php artisan queue:listen --tries=1 --timeout=0\" \"php artisan pail --timeout=0\" --names=server,queue,logs --kill-others"
+            "node -e \"const { spawn } = require('node:child_process'); const isWindows = process.platform === 'win32'; const children = []; let stopped = false; const killChildren = () => { for (const child of children) { if (child && !child.killed) { child.kill('SIGTERM'); } } }; const forward = (label, stream, chunk) => { process.stdout.write('[' + label + '] ' + chunk.toString()); }; const start = (label, args) => { const child = spawn('php', args, { stdio: ['ignore', 'pipe', 'pipe'], windowsHide: true }); children.push(child); child.stdout.on('data', (chunk) => forward(label, child.stdout, chunk)); child.stderr.on('data', (chunk) => forward(label, child.stderr, chunk)); child.on('exit', (code) => { if (stopped) { return; } if (code && code !== 0) { stopped = true; killChildren(); process.exit(code); } }); return child; }; process.on('SIGINT', () => { stopped = true; killChildren(); process.exit(0); }); process.on('SIGTERM', () => { stopped = true; killChildren(); process.exit(0); }); start('server', ['artisan', 'serve']); start('queue', ['artisan', 'queue:listen', '--tries=1', '--timeout=0']); if (!isWindows) { start('logs', ['artisan', 'pail', '--timeout=0']); } setInterval(() => {}, 1000);\""
         ],
         "test": [
             "@php artisan config:clear --ansi",
@@ -74,7 +75,7 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [ ]
         }
     },
     "config": {
