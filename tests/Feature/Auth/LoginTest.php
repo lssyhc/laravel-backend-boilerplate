@@ -91,7 +91,20 @@ describe('POST /api/v1/auth/login', function () {
             ->assertJsonPath('message', 'The provided credentials are incorrect.');
     });
 
-    // ── Validation Errors (422) ─────────────────────────────────────────
+    // ── Forbidden (403) ─────────────────────────────────────────────────────────
+
+    it('fails with unverified email', function () {
+        User::factory()->unverified()->create([
+            'email' => 'john@example.com',
+            'password' => 'password',
+        ]);
+
+        $this->postJson('/api/v1/auth/login', [
+            'email' => 'john@example.com',
+            'password' => 'password',
+        ])->assertStatus(403)
+            ->assertJsonPath('message', 'Your email address is not verified.');
+    });    // ── Validation Errors (422) ─────────────────────────────────────────
 
     it('fails without email', function () {
         $this->postJson('/api/v1/auth/login', [

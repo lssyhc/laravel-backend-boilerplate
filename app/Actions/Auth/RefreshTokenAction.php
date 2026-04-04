@@ -4,18 +4,24 @@ declare(strict_types=1);
 
 namespace App\Actions\Auth;
 
-use App\Enums\TokenAbility;
 use App\Models\User;
 use Laravel\Sanctum\NewAccessToken;
+use Laravel\Sanctum\PersonalAccessToken;
 
 final class RefreshTokenAction
 {
+    public function __construct(
+        private readonly CreateTokenAction $createTokenAction,
+    ) {}
+
     public function execute(User $user): NewAccessToken
     {
-        return $user->createToken(
-            TokenAbility::TOKEN_NAME,
-            TokenAbility::values(),
-            now()->addMinutes((int) config('sanctum.expiration', 1440)), // @phpstan-ignore cast.int
-        );
+        $token = $user->currentAccessToken();
+
+        if ($token instanceof PersonalAccessToken) { // @phpstan-ignore instanceof.alwaysTrue
+            $token->delete();
+        }
+
+        return $this->createTokenAction->execute($user);
     }
 }

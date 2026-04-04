@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Actions\Auth\LoginUserAction;
 use App\DTOs\Auth\LoginUserData;
+use App\Exceptions\Auth\EmailNotVerifiedException;
 use App\Exceptions\Auth\InvalidCredentialsException;
 use App\Models\User;
 
@@ -55,5 +56,21 @@ describe('LoginUserAction', function () {
 
         $action->execute($data);
     })->throws(InvalidCredentialsException::class);
+
+    it('throws EmailNotVerifiedException with unverified email', function () {
+        User::factory()->unverified()->create([
+            'email' => 'john@example.com',
+            'password' => 'password',
+        ]);
+
+        $action = new LoginUserAction;
+
+        $data = new LoginUserData(
+            email: 'john@example.com',
+            password: 'password',
+        );
+
+        $action->execute($data);
+    })->throws(EmailNotVerifiedException::class);
 
 });

@@ -17,6 +17,8 @@ final class UserController extends Controller
         /** @var User $user */
         $user = $request->user();
 
+        // Authorization check — currently always passes since we're viewing self.
+        // Becomes meaningful when this endpoint accepts a {user} route parameter.
         Gate::authorize('view', $user);
 
         return $this->successResponse(

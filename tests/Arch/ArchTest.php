@@ -94,3 +94,7 @@ arch('exceptions extend Exception')
 arch('traits are not classes')
     ->expect('App\Support')
     ->toBeTraits();
+
+arch('providers are final classes')
+    ->expect('App\Providers')
+    ->toBeFinal();

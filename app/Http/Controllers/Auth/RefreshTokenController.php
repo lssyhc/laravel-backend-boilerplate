@@ -10,7 +10,6 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Laravel\Sanctum\PersonalAccessToken;
 
 final class RefreshTokenController extends Controller
 {
@@ -18,12 +17,6 @@ final class RefreshTokenController extends Controller
     {
         /** @var User $user */
         $user = $request->user();
-
-        $token = $user->currentAccessToken();
-
-        if ($token instanceof PersonalAccessToken) { // @phpstan-ignore instanceof.alwaysTrue
-            $token->delete();
-        }
 
         $newToken = $action->execute($user);
 
