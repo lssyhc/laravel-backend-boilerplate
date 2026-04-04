@@ -18,7 +18,14 @@ final class LoginUserAction
     {
         $user = User::where('email', $data->email)->first();
 
-        if (! $user || ! Hash::check($data->password, $user->password)) {
+        if (! $user instanceof User) {
+            // Prevent timing-based user enumeration
+            Hash::make('timing-attack-prevention');
+
+            throw new InvalidCredentialsException;
+        }
+
+        if (! Hash::check($data->password, $user->password)) {
             throw new InvalidCredentialsException;
         }
 

@@ -22,4 +22,14 @@ describe('LogoutUserAction', function () {
         ]);
     });
 
+    it('handles missing access token gracefully', function () {
+        $user = User::factory()->create();
+
+        $action = new LogoutUserAction;
+        $action->execute($user);
+
+        // No exception thrown — graceful handling
+        expect(true)->toBeTrue();
+    });
+
 });

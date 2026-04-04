@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Enums\TokenAbility;
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
 
@@ -18,7 +19,7 @@ describe('GET /api/user', function () {
     it('returns authenticated user profile', function () {
         $user = User::factory()->create();
 
-        Sanctum::actingAs($user);
+        Sanctum::actingAs($user, TokenAbility::values());
 
         $response = $this->getJson('/api/user');
 
@@ -36,7 +37,7 @@ describe('GET /api/user', function () {
     it('does not expose password or remember_token', function () {
         $user = User::factory()->create();
 
-        Sanctum::actingAs($user);
+        Sanctum::actingAs($user, TokenAbility::values());
 
         $this->getJson('/api/user')
             ->assertOk()
@@ -55,6 +56,16 @@ describe('GET /api/user', function () {
         $this->withHeader('Authorization', 'Bearer invalid-token')
             ->getJson('/api/user')
             ->assertStatus(401);
+    });
+
+    it('rejects token without required ability', function () {
+        $user = User::factory()->create();
+
+        $token = $user->createToken('limited', ['some:other:ability']);
+
+        $this->withHeader('Authorization', 'Bearer '.$token->plainTextToken)
+            ->getJson('/api/user')
+            ->assertStatus(403);
     });
 
 });

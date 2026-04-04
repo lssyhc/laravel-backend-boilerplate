@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class InvalidCredentialsException extends Exception
+final class InvalidCredentialsException extends Exception
 {
     public function render(Request $request): JsonResponse
     {

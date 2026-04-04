@@ -50,6 +50,31 @@ arch('DTOs are final readonly classes')
     ->toBeFinal()
     ->toBeReadonly();
 
+arch('controllers are final classes')
+    ->expect('App\Http\Controllers')
+    ->toBeFinal()
+    ->ignoring('App\Http\Controllers\Controller');
+
+arch('form requests are final classes')
+    ->expect('App\Http\Requests')
+    ->toBeFinal();
+
+arch('resources are final classes')
+    ->expect('App\Http\Resources')
+    ->toBeFinal();
+
+arch('exceptions are final classes')
+    ->expect('App\Exceptions')
+    ->toBeFinal();
+
+arch('policies are final classes')
+    ->expect('App\Policies')
+    ->toBeFinal();
+
+arch('middleware are final classes')
+    ->expect('App\Http\Middleware')
+    ->toBeFinal();
+
 arch('enums are enums')
     ->expect('App\Enums')
     ->toBeEnums();
@@ -61,3 +86,7 @@ arch('requests extend FormRequest')
 arch('exceptions extend Exception')
     ->expect('App\Exceptions')
     ->toExtend('Exception');
+
+arch('traits are not classes')
+    ->expect('App\Support')
+    ->toBeTraits();

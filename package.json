@@ -13,7 +13,9 @@
     },
     "lint-staged": {
         "**/*.php": [
-            "./vendor/bin/pint",
+            "./vendor/bin/pint"
+        ],
+        "app/**/*.php": [
             "./vendor/bin/phpstan analyse --memory-limit=2G"
         ]
     }

@@ -11,8 +11,10 @@ final class LogoutUserAction
 {
     public function execute(User $user): void
     {
-        /** @var PersonalAccessToken $token */
         $token = $user->currentAccessToken();
-        $token->delete();
+
+        if ($token instanceof PersonalAccessToken) { // @phpstan-ignore instanceof.alwaysTrue
+            $token->delete();
+        }
     }
 }
