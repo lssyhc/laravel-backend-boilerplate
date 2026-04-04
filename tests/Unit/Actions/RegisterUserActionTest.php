@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Actions\Auth\RegisterUserAction;
 use App\DTOs\Auth\RegisterUserData;
 use App\Models\User;
+use Illuminate\Database\QueryException;
 
 describe('RegisterUserAction', function () {
 
@@ -54,6 +57,6 @@ describe('RegisterUserAction', function () {
         );
 
         $action->execute($data);
-    })->throws(\Illuminate\Database\QueryException::class);
+    })->throws(QueryException::class);
 
 });

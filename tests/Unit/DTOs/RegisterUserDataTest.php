@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\DTOs\Auth\RegisterUserData;
 use App\Http\Requests\Auth\RegisterRequest;
 

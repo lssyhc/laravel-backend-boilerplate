@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Actions\Auth\LoginUserAction;
 use App\DTOs\Auth\LoginUserData;
 use App\Exceptions\Auth\InvalidCredentialsException;
