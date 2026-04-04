@@ -15,4 +15,9 @@ class InvalidCredentialsException extends Exception
             'message' => 'The provided credentials are incorrect.',
         ], Response::HTTP_UNAUTHORIZED);
     }
+
+    public function report(): bool
+    {
+        return false;
+    }
 }

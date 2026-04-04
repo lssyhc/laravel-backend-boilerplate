@@ -20,7 +20,8 @@ class LogoutTest extends TestCase
         $response = $this->postJson('/api/auth/logout');
 
         $response->assertOk()
-            ->assertJsonPath('message', 'Successfully logged out.');
+            ->assertJsonPath('message', 'Successfully logged out.')
+            ->assertJsonPath('data', null);
     }
 
     public function test_unauthenticated_user_cannot_logout(): void

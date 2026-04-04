@@ -24,10 +24,13 @@ class LoginTest extends TestCase
 
         $response->assertOk()
             ->assertJsonStructure([
-                'user' => ['id', 'name', 'email', 'email_verified_at', 'created_at', 'updated_at'],
-                'token',
+                'message',
+                'data' => [
+                    'user' => ['id', 'name', 'email', 'email_verified_at', 'created_at', 'updated_at'],
+                    'token',
+                ],
             ])
-            ->assertJsonPath('user.email', 'john@example.com');
+            ->assertJsonPath('data.user.email', 'john@example.com');
     }
 
     public function test_user_cannot_login_with_invalid_password(): void
@@ -101,7 +104,7 @@ class LoginTest extends TestCase
         ]);
 
         $response->assertOk();
-        $this->assertNotEmpty($response->json('token'));
+        $this->assertNotEmpty($response->json('data.token'));
     }
 
     public function test_login_response_does_not_expose_password(): void
@@ -117,7 +120,7 @@ class LoginTest extends TestCase
         ]);
 
         $response->assertOk()
-            ->assertJsonMissingPath('user.password')
-            ->assertJsonMissingPath('user.remember_token');
+            ->assertJsonMissingPath('data.user.password')
+            ->assertJsonMissingPath('data.user.remember_token');
     }
 }

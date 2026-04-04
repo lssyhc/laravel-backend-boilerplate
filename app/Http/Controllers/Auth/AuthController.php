@@ -25,10 +25,14 @@ class AuthController extends Controller
     ): JsonResponse {
         $user = $action->execute(RegisterUserData::fromRequest($request));
 
-        return response()->json([
-            'user' => new UserResource($user),
-            'token' => $user->createToken('auth', [TokenAbility::All->value])->plainTextToken,
-        ], Response::HTTP_CREATED);
+        return $this->successResponse(
+            data: [
+                'user' => new UserResource($user),
+                'token' => $user->createToken('auth', [TokenAbility::All->value])->plainTextToken,
+            ],
+            message: 'User registered successfully.',
+            status: Response::HTTP_CREATED,
+        );
     }
 
     public function login(
@@ -37,10 +41,13 @@ class AuthController extends Controller
     ): JsonResponse {
         $user = $action->execute(LoginUserData::fromRequest($request));
 
-        return response()->json([
-            'user' => new UserResource($user),
-            'token' => $user->createToken('auth', [TokenAbility::All->value])->plainTextToken,
-        ]);
+        return $this->successResponse(
+            data: [
+                'user' => new UserResource($user),
+                'token' => $user->createToken('auth', [TokenAbility::All->value])->plainTextToken,
+            ],
+            message: 'Login successful.',
+        );
     }
 
     public function logout(
@@ -52,8 +59,8 @@ class AuthController extends Controller
 
         $action->execute($user);
 
-        return response()->json([
-            'message' => 'Successfully logged out.',
-        ]);
+        return $this->successResponse(
+            message: 'Successfully logged out.',
+        );
     }
 }

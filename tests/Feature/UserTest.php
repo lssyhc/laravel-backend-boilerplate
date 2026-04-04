@@ -21,6 +21,7 @@ class UserTest extends TestCase
 
         $response->assertOk()
             ->assertJsonStructure([
+                'message',
                 'data' => ['id', 'name', 'email', 'email_verified_at', 'created_at', 'updated_at'],
             ])
             ->assertJsonPath('data.id', $user->id)
@@ -45,6 +46,7 @@ class UserTest extends TestCase
 
         $response->assertOk()
             ->assertJsonMissingPath('data.password')
-            ->assertJsonMissingPath('data.remember_token');
+            ->assertJsonMissingPath('data.remember_token')
+            ->assertJsonPath('message', 'Success');
     }
 }
