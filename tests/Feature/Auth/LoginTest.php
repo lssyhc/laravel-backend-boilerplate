@@ -17,7 +17,7 @@ describe('POST /api/auth/login', function () {
     it('logs in with valid credentials', function () {
         User::factory()->create([
             'email' => 'john@example.com',
-            'password' => 'password',
+            'email_verified_at' => now(),
         ]);
 
         $response = $this->postJson('/api/auth/login', [
@@ -40,7 +40,7 @@ describe('POST /api/auth/login', function () {
     it('returns a non-empty token upon login', function () {
         User::factory()->create([
             'email' => 'john@example.com',
-            'password' => 'password',
+            'email_verified_at' => now(),
         ]);
 
         $response = $this->postJson('/api/auth/login', [
@@ -55,7 +55,7 @@ describe('POST /api/auth/login', function () {
     it('does not expose password or remember_token in response', function () {
         User::factory()->create([
             'email' => 'john@example.com',
-            'password' => 'password',
+            'email_verified_at' => now(),
         ]);
 
         $response = $this->postJson('/api/auth/login', [
@@ -73,7 +73,7 @@ describe('POST /api/auth/login', function () {
     it('fails with wrong password', function () {
         User::factory()->create([
             'email' => 'john@example.com',
-            'password' => 'password',
+            'email_verified_at' => now(),
         ]);
 
         $this->postJson('/api/auth/login', [
@@ -96,7 +96,6 @@ describe('POST /api/auth/login', function () {
     it('fails with unverified email', function () {
         User::factory()->unverified()->create([
             'email' => 'john@example.com',
-            'password' => 'password',
         ]);
 
         $this->postJson('/api/auth/login', [

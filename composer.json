@@ -52,7 +52,7 @@
         ],
         "test": [
             "@php artisan config:clear --ansi",
-            "@php artisan test"
+            "@php artisan test --env=test"
         ],
         "migrate:dev": [
             "@php artisan migrate"

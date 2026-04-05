@@ -79,18 +79,20 @@ jobs:
 
       - name: Prepare Environment
         run: |
-          cp .env.example .env
-          php artisan key:generate
+          cp .env.test.example .env.test
+          php artisan key:generate --env=test
 
       - name: Run Tests
         run: php artisan test --parallel --coverage --min=80
         env:
+          APP_ENV: test
           DB_CONNECTION: pgsql
           DB_HOST: 127.0.0.1
           DB_PORT: 5432
           DB_DATABASE: laravel_boilerplate_test
           DB_USERNAME: postgres
           DB_PASSWORD: postgres
+          CACHE_STORE: array
 
   security:
     name: Security Audit

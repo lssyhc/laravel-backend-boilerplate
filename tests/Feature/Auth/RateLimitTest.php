@@ -15,7 +15,6 @@ describe('Rate Limiting', function () {
     it('throttles login after 5 attempts', function () {
         User::factory()->create([
             'email' => 'john@example.com',
-            'password' => 'password',
         ]);
 
         for ($i = 0; $i < 5; $i++) {
