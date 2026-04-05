@@ -69,5 +69,9 @@
     // ── Intelephense ────────────────────────────────────────────────
     // Set PHP version so Intelephense understands 8.4 syntax.
     "intelephense.environment.phpVersion": "8.4.0",
-    "intelephense.telemetry.enabled": false
+    "intelephense.telemetry.enabled": false,
+
+    // ── PHP Validation ──────────────────────────────────────────────
+    // Use "php" to auto-detect from system PATH (portable across team).
+    "php.validate.executablePath": "php"
 }
