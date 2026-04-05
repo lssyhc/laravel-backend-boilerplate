@@ -8,11 +8,11 @@ use Laravel\Sanctum\Sanctum;
 
 /*
 |--------------------------------------------------------------------------
-| GET /api/v1/user
+| GET /api/user
 |--------------------------------------------------------------------------
 */
 
-describe('GET /api/v1/user', function () {
+describe('GET /api/user', function () {
 
     // ── Happy Path ──────────────────────────────────────────────────────
 
@@ -21,7 +21,7 @@ describe('GET /api/v1/user', function () {
 
         Sanctum::actingAs($user, TokenAbility::values());
 
-        $response = $this->getJson('/api/v1/user');
+        $response = $this->getJson('/api/user');
 
         $response->assertOk()
             ->assertJsonStructure([
@@ -39,7 +39,7 @@ describe('GET /api/v1/user', function () {
 
         Sanctum::actingAs($user, TokenAbility::values());
 
-        $this->getJson('/api/v1/user')
+        $this->getJson('/api/user')
             ->assertOk()
             ->assertJsonMissingPath('data.password')
             ->assertJsonMissingPath('data.remember_token');
@@ -48,13 +48,13 @@ describe('GET /api/v1/user', function () {
     // ── Unauthorized (401) ──────────────────────────────────────────────
 
     it('rejects unauthenticated request', function () {
-        $this->getJson('/api/v1/user')
+        $this->getJson('/api/user')
             ->assertStatus(401);
     });
 
     it('rejects request with invalid token', function () {
         $this->withHeader('Authorization', 'Bearer invalid-token')
-            ->getJson('/api/v1/user')
+            ->getJson('/api/user')
             ->assertStatus(401);
     });
 
@@ -64,7 +64,7 @@ describe('GET /api/v1/user', function () {
         $token = $user->createToken('limited', ['some:other:ability']);
 
         $this->withHeader('Authorization', 'Bearer '.$token->plainTextToken)
-            ->getJson('/api/v1/user')
+            ->getJson('/api/user')
             ->assertStatus(403);
     });
 

@@ -6,16 +6,16 @@ use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
-| POST /api/v1/auth/register
+| POST /api/auth/register
 |--------------------------------------------------------------------------
 */
 
-describe('POST /api/v1/auth/register', function () {
+describe('POST /api/auth/register', function () {
 
     // ── Happy Path ──────────────────────────────────────────────────────
 
     it('registers a user with valid data', function () {
-        $response = $this->postJson('/api/v1/auth/register', [
+        $response = $this->postJson('/api/auth/register', [
             'name' => 'John Doe',
             'email' => 'john@example.com',
             'password' => 'password',
@@ -41,7 +41,7 @@ describe('POST /api/v1/auth/register', function () {
     });
 
     it('returns a token upon successful registration', function () {
-        $response = $this->postJson('/api/v1/auth/register', [
+        $response = $this->postJson('/api/auth/register', [
             'name' => 'John Doe',
             'email' => 'john@example.com',
             'password' => 'password',
@@ -53,7 +53,7 @@ describe('POST /api/v1/auth/register', function () {
     });
 
     it('hashes the password in database', function () {
-        $this->postJson('/api/v1/auth/register', [
+        $this->postJson('/api/auth/register', [
             'name' => 'John Doe',
             'email' => 'john@example.com',
             'password' => 'password',
@@ -67,7 +67,7 @@ describe('POST /api/v1/auth/register', function () {
     });
 
     it('does not expose password or remember_token in response', function () {
-        $response = $this->postJson('/api/v1/auth/register', [
+        $response = $this->postJson('/api/auth/register', [
             'name' => 'John Doe',
             'email' => 'john@example.com',
             'password' => 'password',
@@ -82,7 +82,7 @@ describe('POST /api/v1/auth/register', function () {
     // ── Validation Errors (422) ─────────────────────────────────────────
 
     it('fails without name', function () {
-        $this->postJson('/api/v1/auth/register', [
+        $this->postJson('/api/auth/register', [
             'email' => 'john@example.com',
             'password' => 'password',
             'password_confirmation' => 'password',
@@ -90,7 +90,7 @@ describe('POST /api/v1/auth/register', function () {
     });
 
     it('fails without email', function () {
-        $this->postJson('/api/v1/auth/register', [
+        $this->postJson('/api/auth/register', [
             'name' => 'John Doe',
             'password' => 'password',
             'password_confirmation' => 'password',
@@ -98,7 +98,7 @@ describe('POST /api/v1/auth/register', function () {
     });
 
     it('fails with invalid email format', function () {
-        $this->postJson('/api/v1/auth/register', [
+        $this->postJson('/api/auth/register', [
             'name' => 'John Doe',
             'email' => 'not-an-email',
             'password' => 'password',
@@ -109,7 +109,7 @@ describe('POST /api/v1/auth/register', function () {
     it('fails with duplicate email', function () {
         User::factory()->create(['email' => 'john@example.com']);
 
-        $this->postJson('/api/v1/auth/register', [
+        $this->postJson('/api/auth/register', [
             'name' => 'John Doe',
             'email' => 'john@example.com',
             'password' => 'password',
@@ -118,14 +118,14 @@ describe('POST /api/v1/auth/register', function () {
     });
 
     it('fails without password', function () {
-        $this->postJson('/api/v1/auth/register', [
+        $this->postJson('/api/auth/register', [
             'name' => 'John Doe',
             'email' => 'john@example.com',
         ])->assertStatus(422)->assertJsonValidationErrors(['password']);
     });
 
     it('fails without password confirmation', function () {
-        $this->postJson('/api/v1/auth/register', [
+        $this->postJson('/api/auth/register', [
             'name' => 'John Doe',
             'email' => 'john@example.com',
             'password' => 'password',
@@ -133,7 +133,7 @@ describe('POST /api/v1/auth/register', function () {
     });
 
     it('fails with mismatched password confirmation', function () {
-        $this->postJson('/api/v1/auth/register', [
+        $this->postJson('/api/auth/register', [
             'name' => 'John Doe',
             'email' => 'john@example.com',
             'password' => 'password',
@@ -142,13 +142,13 @@ describe('POST /api/v1/auth/register', function () {
     });
 
     it('fails when all fields are empty', function () {
-        $this->postJson('/api/v1/auth/register', [])
+        $this->postJson('/api/auth/register', [])
             ->assertStatus(422)
             ->assertJsonValidationErrors(['name', 'email', 'password']);
     });
 
     it('fails when name exceeds max length', function () {
-        $this->postJson('/api/v1/auth/register', [
+        $this->postJson('/api/auth/register', [
             'name' => str_repeat('a', 256),
             'email' => 'john@example.com',
             'password' => 'password',

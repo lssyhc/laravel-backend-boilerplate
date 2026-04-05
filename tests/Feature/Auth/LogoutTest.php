@@ -7,11 +7,11 @@ use Laravel\Sanctum\Sanctum;
 
 /*
 |--------------------------------------------------------------------------
-| POST /api/v1/auth/logout
+| POST /api/auth/logout
 |--------------------------------------------------------------------------
 */
 
-describe('POST /api/v1/auth/logout', function () {
+describe('POST /api/auth/logout', function () {
 
     // ── Happy Path ──────────────────────────────────────────────────────
 
@@ -20,7 +20,7 @@ describe('POST /api/v1/auth/logout', function () {
 
         Sanctum::actingAs($user);
 
-        $this->postJson('/api/v1/auth/logout')
+        $this->postJson('/api/auth/logout')
             ->assertOk()
             ->assertJsonPath('message', 'Successfully logged out.')
             ->assertJsonPath('data', null);
@@ -31,7 +31,7 @@ describe('POST /api/v1/auth/logout', function () {
         $token = $user->createToken('auth');
 
         $this->withHeader('Authorization', 'Bearer '.$token->plainTextToken)
-            ->postJson('/api/v1/auth/logout')
+            ->postJson('/api/auth/logout')
             ->assertOk();
 
         $this->assertDatabaseMissing('personal_access_tokens', [
@@ -42,13 +42,13 @@ describe('POST /api/v1/auth/logout', function () {
     // ── Unauthorized (401) ──────────────────────────────────────────────
 
     it('rejects unauthenticated user', function () {
-        $this->postJson('/api/v1/auth/logout')
+        $this->postJson('/api/auth/logout')
             ->assertStatus(401);
     });
 
     it('rejects request with invalid token', function () {
         $this->withHeader('Authorization', 'Bearer invalid-token')
-            ->postJson('/api/v1/auth/logout')
+            ->postJson('/api/auth/logout')
             ->assertStatus(401);
     });
 

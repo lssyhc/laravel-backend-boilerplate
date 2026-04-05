@@ -7,11 +7,11 @@ use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
-| POST /api/v1/auth/refresh
+| POST /api/auth/refresh
 |--------------------------------------------------------------------------
 */
 
-describe('POST /api/v1/auth/refresh', function () {
+describe('POST /api/auth/refresh', function () {
 
     // ── Happy Path ──────────────────────────────────────────────────────
 
@@ -20,7 +20,7 @@ describe('POST /api/v1/auth/refresh', function () {
         $token = $user->createToken(TokenAbility::TOKEN_NAME, TokenAbility::values());
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token->plainTextToken)
-            ->postJson('/api/v1/auth/refresh');
+            ->postJson('/api/auth/refresh');
 
         $response->assertOk()
             ->assertJsonStructure([
@@ -40,7 +40,7 @@ describe('POST /api/v1/auth/refresh', function () {
         $token = $user->createToken(TokenAbility::TOKEN_NAME, TokenAbility::values());
 
         $this->withHeader('Authorization', 'Bearer '.$token->plainTextToken)
-            ->postJson('/api/v1/auth/refresh')
+            ->postJson('/api/auth/refresh')
             ->assertOk();
 
         $this->assertDatabaseMissing('personal_access_tokens', [
@@ -53,7 +53,7 @@ describe('POST /api/v1/auth/refresh', function () {
         $token = $user->createToken(TokenAbility::TOKEN_NAME, TokenAbility::values());
 
         $response = $this->withHeader('Authorization', 'Bearer '.$token->plainTextToken)
-            ->postJson('/api/v1/auth/refresh');
+            ->postJson('/api/auth/refresh');
 
         $response->assertOk();
         expect($response->json('data.token'))->not->toBe($token->plainTextToken);
@@ -62,13 +62,13 @@ describe('POST /api/v1/auth/refresh', function () {
     // ── Unauthorized (401) ──────────────────────────────────────────────
 
     it('rejects unauthenticated user', function () {
-        $this->postJson('/api/v1/auth/refresh')
+        $this->postJson('/api/auth/refresh')
             ->assertStatus(401);
     });
 
     it('rejects request with invalid token', function () {
         $this->withHeader('Authorization', 'Bearer invalid-token')
-            ->postJson('/api/v1/auth/refresh')
+            ->postJson('/api/auth/refresh')
             ->assertStatus(401);
     });
 

@@ -92,7 +92,7 @@ database/
 ├── migrations/          # Database Migrations
 └── seeders/             # Database Seeders
 routes/
-├── api.php              # API Routes (versioned under /v1)
+├── api.php              # API Routes (without version prefix)
 └── console.php          # Console Commands & Schedules
 tests/
 ├── Arch/                # Architecture rules (Pest arch tests)
@@ -102,7 +102,7 @@ tests/
 
 ## API Endpoints
 
-Semua endpoint berada di bawah prefix `/api/v1`.
+Semua endpoint berada di bawah prefix `/api`.
 
 ### Public (rate limited)
 
@@ -134,7 +134,7 @@ Lihat `.env.example` untuk daftar lengkap. Variable penting:
 
 Menggunakan Laravel Sanctum dengan **token-based authentication**:
 
-- Client mengirim `POST /api/v1/auth/login` untuk mendapatkan Bearer token.
+- Client mengirim `POST /api/auth/login` untuk mendapatkan Bearer token.
 - Token disertakan di header `Authorization: Bearer {token}` pada setiap request.
 - Token memiliki **abilities** (`api:access`, `profile:manage`) untuk membatasi scope akses.
 - Endpoint `/auth/refresh` untuk merotasi token tanpa login ulang.

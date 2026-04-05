@@ -19,13 +19,13 @@ describe('Rate Limiting', function () {
         ]);
 
         for ($i = 0; $i < 5; $i++) {
-            $this->postJson('/api/v1/auth/login', [
+            $this->postJson('/api/auth/login', [
                 'email' => 'john@example.com',
                 'password' => 'wrong-password',
             ]);
         }
 
-        $this->postJson('/api/v1/auth/login', [
+        $this->postJson('/api/auth/login', [
             'email' => 'john@example.com',
             'password' => 'wrong-password',
         ])->assertStatus(429);
@@ -33,7 +33,7 @@ describe('Rate Limiting', function () {
 
     it('throttles register after 5 attempts', function () {
         for ($i = 0; $i < 5; $i++) {
-            $this->postJson('/api/v1/auth/register', [
+            $this->postJson('/api/auth/register', [
                 'name' => "User {$i}",
                 'email' => "user{$i}@example.com",
                 'password' => 'password',
@@ -41,7 +41,7 @@ describe('Rate Limiting', function () {
             ]);
         }
 
-        $this->postJson('/api/v1/auth/register', [
+        $this->postJson('/api/auth/register', [
             'name' => 'User Extra',
             'email' => 'extra@example.com',
             'password' => 'password',

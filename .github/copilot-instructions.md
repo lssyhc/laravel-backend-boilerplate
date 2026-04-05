@@ -175,10 +175,10 @@ Use `$this->successResponse(data: ..., message: '...', status: 200)`.
 
 ## 4. Routing
 
-All routes are defined in `routes/api.php` under a versioned prefix:
+All routes are defined in `routes/api.php` without API version prefix:
 
 ```php
-Route::prefix('v1')->as('v1.')->group(function () { ... });
+Route::prefix('auth')->as('auth.')->group(function () { ... });
 ```
 
 Rules:
@@ -260,7 +260,7 @@ tests/
 
 ### Feature Tests
 
-- Test the full HTTP lifecycle: `$this->postJson('/api/v1/...')`.
+- Test the full HTTP lifecycle: `$this->postJson('/api/...')`.
 - Assert status codes, JSON structure (`assertJsonStructure`), and specific values (`assertJsonPath`).
 - Assert database state (`assertDatabaseHas`, `assertDatabaseMissing`).
 - Use `Sanctum::actingAs($user, abilities)` for authenticated requests.
@@ -334,7 +334,7 @@ When creating a new feature, generate ALL of the following:
 7. **FormRequest** — `final`, with validation rules.
 8. **Controller** — `final`, thin, delegates to Action.
 9. **Resource** — `final`, typed `toArray()`.
-10. **Routes** — versioned under `v1`, named, with appropriate middleware.
+10. **Routes** — non-versioned under `/api`, named, with appropriate middleware.
 11. **Feature Tests** — happy path, auth, validation, edge cases.
 12. **Unit Tests** — for Action, DTO, Policy, Resource, Exception.
 13. **Arch Test Update** — add rules if introducing new architectural layers.

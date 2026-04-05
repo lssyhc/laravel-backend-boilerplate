@@ -13,13 +13,13 @@ use App\Models\User;
 describe('Exception Rendering', function () {
 
     it('renders 404 for non-existent API route', function () {
-        $this->getJson('/api/v1/nonexistent')
+        $this->getJson('/api/nonexistent')
             ->assertStatus(404)
             ->assertJsonStructure(['message']);
     });
 
     it('renders 401 for unauthenticated API request', function () {
-        $this->getJson('/api/v1/user')
+        $this->getJson('/api/user')
             ->assertStatus(401)
             ->assertJson(['message' => 'Unauthenticated.']);
     });
@@ -29,13 +29,13 @@ describe('Exception Rendering', function () {
         $token = $user->createToken('limited', ['some:other:ability']);
 
         $this->withHeader('Authorization', 'Bearer '.$token->plainTextToken)
-            ->getJson('/api/v1/user')
+            ->getJson('/api/user')
             ->assertStatus(403)
             ->assertJsonStructure(['message']);
     });
 
     it('renders 422 with structured validation errors', function () {
-        $this->postJson('/api/v1/auth/login', [])
+        $this->postJson('/api/auth/login', [])
             ->assertStatus(422)
             ->assertJsonStructure([
                 'message',
@@ -44,7 +44,7 @@ describe('Exception Rendering', function () {
     });
 
     it('renders custom HttpException with correct status and message', function () {
-        $this->postJson('/api/v1/auth/login', [
+        $this->postJson('/api/auth/login', [
             'email' => 'nonexistent@example.com',
             'password' => 'password',
         ])->assertStatus(401)
