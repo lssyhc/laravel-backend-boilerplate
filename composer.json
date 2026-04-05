@@ -54,6 +54,24 @@
             "@php artisan config:clear --ansi",
             "@php artisan test"
         ],
+        "migrate:dev": [
+            "@php artisan migrate"
+        ],
+        "migrate:test": [
+            "@php artisan migrate --env=test"
+        ],
+        "migrate:fresh:dev": [
+            "@php artisan migrate:fresh"
+        ],
+        "migrate:fresh:test": [
+            "@php artisan migrate:fresh --env=test"
+        ],
+        "migrate:status:dev": [
+            "@php artisan migrate:status"
+        ],
+        "migrate:status:test": [
+            "@php artisan migrate:status --env=test"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
@@ -66,7 +84,6 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi",
-            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
             "@php artisan migrate --graceful --ansi"
         ],
         "pre-package-uninstall": [

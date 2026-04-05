@@ -51,6 +51,20 @@ jobs:
   test:
     name: Tests (Pest)
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: laravel_boilerplate_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d laravel_boilerplate_test"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
     steps:
       - uses: actions/checkout@v6
 
@@ -71,8 +85,12 @@ jobs:
       - name: Run Tests
         run: php artisan test --parallel --coverage --min=80
         env:
-          DB_CONNECTION: sqlite
-          DB_DATABASE: ":memory:"
+          DB_CONNECTION: pgsql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 5432
+          DB_DATABASE: laravel_boilerplate_test
+          DB_USERNAME: postgres
+          DB_PASSWORD: postgres
 
   security:
     name: Security Audit

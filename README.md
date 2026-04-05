@@ -123,12 +123,12 @@ Semua endpoint berada di bawah prefix `/api`.
 
 Lihat `.env.example` untuk daftar lengkap. Variable penting:
 
-| Variable           | Deskripsi                         |
-| ------------------ | --------------------------------- |
-| `FRONTEND_URL`     | URL frontend untuk CORS           |
-| `DB_CONNECTION`    | Database driver (default: sqlite) |
-| `QUEUE_CONNECTION` | Queue driver (default: database)  |
-| `BCRYPT_ROUNDS`    | Bcrypt cost factor (default: 12)  |
+| Variable           | Deskripsi                        |
+| ------------------ | -------------------------------- |
+| `FRONTEND_URL`     | URL frontend untuk CORS          |
+| `DB_CONNECTION`    | Database driver (default: pgsql) |
+| `QUEUE_CONNECTION` | Queue driver (default: database) |
+| `BCRYPT_ROUNDS`    | Bcrypt cost factor (default: 12) |
 
 ## API Authentication
 
